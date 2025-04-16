@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Bitcoin, CreditCard, Gift } from "lucide-react";
+import { motion } from "framer-motion";
 
 const SupportedAssets: React.FC = () => {
   const assets = [
@@ -34,46 +35,101 @@ const SupportedAssets: React.FC = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
     <section id="services" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <motion.div 
+          className="text-center max-w-3xl mx-auto mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 relative inline-block">
             Supported Assets
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-exchange-purple to-purple-400"></div>
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 mt-4">
             We support a wide range of digital assets and payment methods, making it easy to exchange whatever you need.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {assets.map((category, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+            <motion.div 
+              key={index} 
+              className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              variants={itemVariants}
+              whileHover={{ y: -5 }}
+            >
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-6 text-exchange-purple">{category.category}</h3>
+                <h3 className="text-xl font-bold mb-6 text-exchange-purple relative inline-block">
+                  {category.category}
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-exchange-purple"></div>
+                </h3>
                 <ul className="space-y-4">
                   {category.items.map((asset, itemIndex) => (
-                    <li key={itemIndex} className="flex items-center">
-                      <div className="mr-3 text-exchange-purple">
+                    <motion.li 
+                      key={itemIndex} 
+                      className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      <div className="mr-3 text-exchange-purple bg-exchange-purple/10 p-2 rounded-full">
                         {asset.icon}
                       </div>
                       <span>{asset.name}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-12 text-center">
+        <motion.div 
+          className="mt-12 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+        >
           <p className="text-gray-600 mb-2">
             Don't see what you're looking for?
           </p>
-          <a href="#contact" className="text-exchange-purple font-medium hover:underline">
+          <a 
+            href="#contact" 
+            className="text-exchange-purple font-medium hover:underline relative inline-block group"
+          >
             Contact us for custom exchanges
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-exchange-purple transition-all duration-300 group-hover:w-full"></span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

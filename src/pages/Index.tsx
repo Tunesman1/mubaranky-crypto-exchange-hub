@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 
 const Index: React.FC = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-white">
       <Navbar />
       <Hero />
       <SupportedAssets />
