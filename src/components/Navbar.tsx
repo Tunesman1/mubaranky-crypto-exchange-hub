@@ -7,12 +7,35 @@ import { motion } from "framer-motion";
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
   
   useEffect(() => {
     const handleScroll = () => {
+      // Handle navbar background change on scroll
       const isScrolled = window.scrollY > 20;
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
+      }
+      
+      // Handle active section tracking
+      const sections = [
+        { id: "hero", offset: 0 },
+        { id: "assets", offset: 300 },
+        { id: "features", offset: 900 },
+        { id: "calculator", offset: 1500 },
+        { id: "trust", offset: 2100 },
+        { id: "testimonials", offset: 2700 },
+        { id: "contact", offset: 3300 },
+      ];
+      
+      const scrollPosition = window.scrollY;
+      
+      // Find the current active section based on scroll position
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (scrollPosition >= sections[i].offset) {
+          setActiveSection(sections[i].id);
+          break;
+        }
       }
     };
 
@@ -29,11 +52,13 @@ const Navbar: React.FC = () => {
   }`;
 
   const navItems = [
-    { name: "Services", href: "#services" },
-    { name: "Features", href: "#features" },
-    { name: "Exchange", href: "#calculator" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Contact", href: "#contact" }
+    { name: "Home", href: "#hero", id: "hero" },
+    { name: "Assets", href: "#assets", id: "assets" },
+    { name: "Features", href: "#features", id: "features" },
+    { name: "Exchange", href: "#calculator", id: "calculator" },
+    { name: "Trust", href: "#trust", id: "trust" },
+    { name: "Testimonials", href: "#testimonials", id: "testimonials" },
+    { name: "Contact", href: "#contact", id: "contact" }
   ];
 
   return (
@@ -61,13 +86,21 @@ const Navbar: React.FC = () => {
             <motion.a
               key={item.name}
               href={item.href}
-              className="text-gray-700 hover:text-exchange-purple relative group transition-colors"
+              className={`relative group transition-colors ${
+                activeSection === item.id 
+                  ? "text-exchange-purple font-semibold" 
+                  : "text-gray-700 hover:text-exchange-purple"
+              }`}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 * (index + 1) }}
             >
               {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-exchange-purple transition-all duration-300 group-hover:w-full"></span>
+              <span 
+                className={`absolute -bottom-1 left-0 h-0.5 bg-exchange-purple transition-all duration-300 ${
+                  activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              ></span>
             </motion.a>
           ))}
           <motion.div
@@ -108,7 +141,11 @@ const Navbar: React.FC = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-exchange-purple transition-colors py-2"
+                className={`py-2 transition-colors ${
+                  activeSection === item.id 
+                    ? "text-exchange-purple font-semibold" 
+                    : "text-gray-700 hover:text-exchange-purple"
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
